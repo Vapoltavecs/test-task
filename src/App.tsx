@@ -1,23 +1,20 @@
-import { useState } from 'react'
-import { generateUniqueId } from './utils/generateUniqueId';
-import { getRandomColor } from './utils/getRandomColor';
 import { AnimatePresence } from 'framer-motion';
 import s from './App.module.css'
-import { ISquare, Square } from './components/Square';
+import { Square } from './components/Square';
+import { sqauresSelector } from './redux/selectors/sqauresSelector';
+import { sqauresActions } from './redux/slices/squaresSlice';
+import { useAppDispatch, useAppSelector } from './redux/hooks/hooks';
 
 function App() {
-  const [squares, setSquares] = useState<ISquare[]>([])
+  const squares = useAppSelector(sqauresSelector)
+  const dispatch = useAppDispatch()
 
   const onAdd = () => {
-    setSquares(squares => [{id: generateUniqueId(), color: getRandomColor()}, ...squares])
+    dispatch(sqauresActions.addSquare())
   }
 
   const onRemove = () => {
-    setSquares(squares => {
-      if(squares.length === 0) return squares
-      squares.pop()
-      return [...squares]
-    })
+    dispatch(sqauresActions.removeSquare())
   }
 
   return (
